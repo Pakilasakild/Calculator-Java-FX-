@@ -1,0 +1,30 @@
+.root { /* */
+    -fx-background-color: #010102;
+}
+
+#display {
+    -fx-background-color: #010102;
+    -fx-text-fill: white;
+    -fx-alignment: center-right;
+}
+
+.button {
+    -fx-background-color: #17171A;
+    -fx-text-fill: white;
+}
+
+
+.operator {
+    -fx-background-color: #2D2D30;
+    -fx-text-fill: #63FE7D;
+}
+
+#btnClear {
+    -fx-background-color: #2D2D30;
+    -fx-text-fill: #FC6C65;
+}
+
+#btnEquals {
+    -fx-background-color: #318507;
+    -fx-text-fill: white;
+}

@@ -74,6 +74,12 @@ public class CalculatorController {
             handleClearAction();
             error = false;
         }
+        if (display.getText().isEmpty()){
+            AlertUtilities.displayError("Įveskite skaičius bei veiksmus.");
+        }
+        if (operator.isEmpty() && !display.getText().isEmpty()){
+            AlertUtilities.displayError("Pasirinkite operatorių.");
+        }
         if (!display.getText().isEmpty() && !operator.isEmpty()) {
             double afterOp = Double.parseDouble(display.getText());
             double result = calculate(beforeOp, afterOp, operator);

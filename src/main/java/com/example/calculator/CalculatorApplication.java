@@ -14,7 +14,7 @@ public class CalculatorApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(CalculatorApplication.class.getResource("calculator.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
-        stage.setTitle("Calculator 1.0.3");
+        stage.setTitle("Calculator 1.1.5");
         stage.setScene(scene);
         stage.show();
     }

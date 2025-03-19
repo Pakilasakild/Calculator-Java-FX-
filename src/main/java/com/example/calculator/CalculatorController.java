@@ -13,15 +13,19 @@ public class CalculatorController {
     @FXML
     private TextField display;
     private double beforeOp = 0;
+    private double lastAfterOp = 0;
     private String operator = "";
     private boolean startNewNumber = true;
     private boolean decimalUsed = false;
     private boolean error = false;
+    private boolean secondNumber = false;
+
 
     @FXML
     private void handleNumberAction(ActionEvent event) {
+        secondNumber = true;
         String number = ((Button) event.getSource()).getText();
-        if (error){
+        if (error) {
             handleClearAction();
             error = false;
         }
@@ -37,25 +41,26 @@ public class CalculatorController {
                 display.setText(display.getText() + number);
             } else if (decimalUsed && Objects.equals(number, ".")) {
                 AlertUtilities.displayError("Negalima naudoti dar vieno kablelio.");
-            } else if (!Objects.equals(number, "."))
-                display.setText(display.getText() + number);
+            } else if (!Objects.equals(number, ".")) display.setText(display.getText() + number);
         }
     }
 
     @FXML
     private void handleSignChange() {
-        if (error){
+        if (error) {
             handleClearAction();
             error = false;
+        } else {
+            String number = (display.getText());
+            double num = Double.parseDouble(number) * -1;
+            display.setText(String.valueOf(num));
         }
-        String number = (display.getText());
-        double num = Double.parseDouble(number) * -1;
-        display.setText(String.valueOf(num));
     }
 
     @FXML
     private void handleOperatorAction(ActionEvent event) {
-        if (error){
+        secondNumber = false;
+        if (error) {
             handleClearAction();
             error = false;
         }
@@ -70,27 +75,41 @@ public class CalculatorController {
 
     @FXML
     private void handleEqualsAction() {
-        if (error){
+        if (error) {
             handleClearAction();
             error = false;
         }
-        if (display.getText().isEmpty()){
+        if (display.getText().isEmpty()) {
             AlertUtilities.displayError("Įveskite skaičius bei veiksmus.");
+            return;
         }
-        if (operator.isEmpty() && !display.getText().isEmpty()){
+        if (operator.isEmpty()) {
             AlertUtilities.displayError("Pasirinkite operatorių.");
+            return;
         }
-        if (!display.getText().isEmpty() && !operator.isEmpty()) {
-            double afterOp = Double.parseDouble(display.getText());
-            double result = calculate(beforeOp, afterOp, operator);
-            if (result == 0 && operator.equals("÷") && beforeOp != 0 || (operator.equals("%") && beforeOp != 0 && result == 0)) {
-                AlertUtilities.displayError("Negalima dalinti iš 0");
-                display.setText("KLAIDA");
-                error = true;
-            } else {
-                display.setText(String.valueOf(result));
-                startNewNumber = true;
-            }
+
+        double afterOp = 0;
+        if (startNewNumber) {
+            afterOp = lastAfterOp;
+        } else {
+            afterOp = Double.parseDouble(display.getText());
+            lastAfterOp = afterOp;
+        }
+        if (!secondNumber) {
+            AlertUtilities.displayError("Įveskite antrąjį skaičių.");
+            return;
+        }
+
+        double result = calculate(beforeOp, afterOp, operator);
+
+        if ((afterOp == 0 && operator.equals("÷")) || (afterOp == 0 && operator.equals("%"))) {
+            AlertUtilities.displayError("Negalima dalinti iš 0");
+            display.setText("KLAIDA");
+            error = true;
+        } else {
+            display.setText(String.valueOf(result));
+            beforeOp = result;
+            startNewNumber = true;
         }
     }
 
